@@ -1,0 +1,82 @@
+Practice 1 :-> Create a MongoDB Container
+==============================================
+1. Dockerize the MongoDb database.
+-------------------------------------------------------------
+docker images
+REPOSITORY   TAG       IMAGE ID   CREATED   SIZE
+
+2. Pull the mongo image from docker Hub
+--------------------------------------------------------------------
+C:\Users\Dell>docker pull mongo
+Using default tag: latest
+latest: Pulling from library/mongo
+01007420e9b0: Pull complete
+bc3bec6a423e: Pull complete
+c5db81b694a8: Pull complete
+427a1a117df0: Pull complete
+dfb180c9e7b5: Pull complete
+92e6f08e133c: Pull complete
+374f042f3159: Pull complete
+73549bb43006: Pull complete
+Digest: sha256:5a54d0323fe207d15dc48773a7b9e7e519f83ad94a19c2ddac201d7aae109eb1
+Status: Downloaded newer image for mongo:latest
+docker.io/library/mongo:latest
+
+3. Run the Mongo Container 
+---------------------------------------------
+C:\Users\Dell>docker run -d --name mongo-container mongo:latest
+101384103c5213bcb805b009b6fc38d1237afd8625a784eb65edd943f4bfcf4c
+
+C:\Users\Dell>docker ps -a
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS       NAMES
+101384103c52   mongo:latest   "docker-entrypoint.s…"   29 seconds ago   Up 21 seconds   27017/tcp   mongo-container
+
+4. Execute the Mongo Terminal
+----------------------------------------------------
+
+C:\Users\Dell>docker exec -it mongo-container bash
+root@101384103c52:/# mongosh
+Current Mongosh Log ID: 65d5a41f1928deaa376d1f5a
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.1.4
+Using MongoDB:          7.0.5
+Using Mongosh:          2.1.4
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+5. Create a database to store customer details
+-----------------------------------------------------------------------
+
+test> show dbs
+admin   40.00 KiB
+config  72.00 KiB
+local   72.00 KiB
+mydb    40.00 KiB
+test> use customer_db
+switched to db customer_db
+
+6. Create a Collection called customers
+----------------------------------------------------------------------
+customer_db> db.createCollection("Customers")
+{ ok: 1 }
+
+7. Insert the customer name , age , phoneNo, address, email into the customer collection :-
+-------------------------------------------------------------------------------------------------------
+customer_db> db.Customers.insertOne({"customerName":"Nancy","age":23,"address":"Rampur, Uttar Pradesh","phone No":7417729,"email":"nancy@gmail.com"})
+{
+  acknowledged: true,
+  insertedId: ObjectId('65d5b7fa889c20b716be8e6b')
+}
+
+8. Output
+---------------------------
+customer_db> db.Customers.find().pretty();
+[
+  {
+    _id: ObjectId('65d5b7fa889c20b716be8e6b'),
+    customerName: 'Nancy',
+    age: 23,
+    address: 'Rampur Uttar Pradesh',
+    'phone No': 7417729,
+    email: 'nancy@gmail.com'
+  }
+]
